@@ -43,6 +43,11 @@ public class CustomerPopDaoTest extends TestCase {
 		session = SessionFactoryUtils.getSession(sessions, true);
 		jdbcConnection = SessionFactoryUtils.getDataSource(sessions).getConnection();
 		TransactionSynchronizationManager.bindResource(sessions, new SessionHolder(session));
+		ICustomerDao iCustomerDao = (ICustomerDao) context.getBean("customerDao");
+		Collection<Customer> listCustomers = iCustomerDao.getAll();
+		for(Customer c: listCustomers) {
+			System.out.println(c.getCustomerId()+ "--" + c.getName());
+		}
 		DatabaseOperation.INSERT.execute(getConnection(), dataset);
 
 	}
@@ -57,5 +62,6 @@ public class CustomerPopDaoTest extends TestCase {
 		IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 		return connection;
 	}
-
+	
+	
 }
