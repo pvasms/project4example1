@@ -42,13 +42,10 @@ public class CustomerDaoTest extends TestCase {
         super.tearDown();
     }
 
-    // TODO add test methods here. The name must begin with 'test'. For example:
-    public void testReadCustomer() {
-      
-        Customer customer = new Customer(1, "CustomerName", "CustomerName", "CustomerCity", "CustomerState", "CustomerZip", "010101010101", new ArrayList<CustomerOrder>());
    
+    public void testReadCustomer() {
+        Customer customer = new Customer(1, "CustomerName", "CustomerName", "CustomerCity", "CustomerState", "CustomerZip", "010101010101", new ArrayList<CustomerOrder>());
         iCustomerDao.save(customer);
-
         List<Customer> customers = (List<Customer>) iCustomerDao.getAll();
         assertFalse(customers.isEmpty());
         assertEquals(customers.get(0).getName(), customer.getName());
