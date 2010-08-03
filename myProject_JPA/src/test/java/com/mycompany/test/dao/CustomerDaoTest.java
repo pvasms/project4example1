@@ -6,20 +6,15 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
-
-
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
-import org.springframework.orm.hibernate3.SessionHolder;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.mycompany.dao.ICustomerDao;
 import com.mycompany.entity.Customer;
@@ -27,40 +22,43 @@ import com.mycompany.entity.Customer;
 public class CustomerDaoTest extends TestCase {
 
 	private static final String[] LOCATIONS = { "application-context.xml" };
-	protected ApplicationContext context;
-	protected SessionFactory sessionFactory;
-	protected Session session;
-	protected IDataSet dataset;
-	protected InputStream inputStream;
-	protected Connection jdbcConnection;
+	private static final String FLAT_XML_DATASET = "FlatXmlDataSet.xml";
+	private ApplicationContext context;
+	private ICustomerDao iCustomerDao;
+
 
 	@Override
 	protected void setUp() throws Exception {
-
 		super.setUp();
 		context = new ClassPathXmlApplicationContext(LOCATIONS);
-		inputStream = this.getClass().getClassLoader().getResourceAsStream("FlatXmlDataSet.xml");
-		dataset = new FlatXmlDataSet(inputStream);
-		sessionFactory = (SessionFactory) context.getBean("sessionFactory");
-		session = SessionFactoryUtils.getSession(sessionFactory, true);
-		jdbcConnection = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
-		TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
-		ICustomerDao iCustomerDao = (ICustomerDao) context.getBean("customerDao");
+		iCustomerDao = (ICustomerDao) context.getBean("customerDao");
+		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), getDataSet());
+
+	}
+
+	public void testGetAllCustomers() {
 		Collection<Customer> listCustomers = iCustomerDao.getAll();
-		for(Customer c: listCustomers) {
-			System.out.println(c.getCustomerId()+ "--" + c.getName());
-		}
-		DatabaseOperation.INSERT.execute(getConnection(), dataset);
+		assertFalse(listCustomers.isEmpty());
+	}
+	
+	public void testSaveCustomer() {
+		Collection<Customer> listCustomers1 = iCustomerDao.getAll();
+		Customer customer = new Customer(1, "name","adresse", "city", "state", "123", "0606060606", null);
+		iCustomerDao.save(customer);
+		Collection<Customer> listCustomers2 = iCustomerDao.getAll();
+		assertEquals(listCustomers2.size() - listCustomers1.size(), 1);
+	}
+	
 
+	private IDataSet getDataSet() throws Exception {
+		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(FLAT_XML_DATASET);
+		IDataSet dataset = new FlatXmlDataSet(inputStream);
+		return dataset;
 	}
 
-	public void testDossier() {
-		ICustomerDao iCustomerDao = (ICustomerDao) context.getBean("customerDao");
-		Collection<Customer> listDossier = iCustomerDao.getAll();
-		assertEquals(listDossier.size(), 8);
-	}
-
-	protected IDatabaseConnection getConnection() throws Exception {
+	private IDatabaseConnection getConnection() throws Exception {
+		SessionFactory sessionFactory = (SessionFactory) context.getBean("sessionFactory");
+		Connection jdbcConnection = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
 		IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 		return connection;
 	}
