@@ -6,6 +6,8 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
+
+
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -26,7 +28,7 @@ public class CustomerPopDaoTest extends TestCase {
 
 	private static final String[] LOCATIONS = { "application-context.xml" };
 	protected ApplicationContext context;
-	protected SessionFactory sessions;
+	protected SessionFactory sessionFactory;
 	protected Session session;
 	protected IDataSet dataset;
 	protected InputStream inputStream;
@@ -39,10 +41,10 @@ public class CustomerPopDaoTest extends TestCase {
 		context = new ClassPathXmlApplicationContext(LOCATIONS);
 		inputStream = this.getClass().getClassLoader().getResourceAsStream("FlatXmlDataSet.xml");
 		dataset = new FlatXmlDataSet(inputStream);
-		sessions = (SessionFactory) context.getBean("sessionFactory");
-		session = SessionFactoryUtils.getSession(sessions, true);
-		jdbcConnection = SessionFactoryUtils.getDataSource(sessions).getConnection();
-		TransactionSynchronizationManager.bindResource(sessions, new SessionHolder(session));
+		sessionFactory = (SessionFactory) context.getBean("sessionFactory");
+		session = SessionFactoryUtils.getSession(sessionFactory, true);
+		jdbcConnection = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
+		TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
 		ICustomerDao iCustomerDao = (ICustomerDao) context.getBean("customerDao");
 		Collection<Customer> listCustomers = iCustomerDao.getAll();
 		for(Customer c: listCustomers) {
