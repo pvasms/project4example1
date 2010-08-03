@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dataset SYSTEM "src/test/resources/my-dataset.dtd">
 <dataset>
 	<customer customer_id="1" tax_id="2" name="name1" adresse="adresse1"
 		city="Paris" state="Paris" zip="75001" phone="0606060606" />
@@ -6,28 +6,17 @@
 		city="Paris" state="Paris" zip="75002" phone="0606060607" />
 	<customer customer_id="3" tax_id="4" name="name3" adresse="adresse3"
 		city="Paris" state="Paris" zip="75003" phone="0606060608" />
-	<customer customer_id="4" tax_id="5" name="name4" adresse="adresse4"
-		city="Paris" state="Paris" zip="75004" phone="0606060609" />
-	<customer customer_id="5" tax_id="6" name="name5" adresse="adresse5"
-		city="Paris" state="Paris" zip="75005" phone="0606060610" />
-	<customer customer_id="6" tax_id="7" name="name6" adresse="adresse6"
-		city="Paris" state="Paris" zip="75006" phone="0606060611" />
-	<customer customer_id="7" tax_id="8" name="name7" adresse="adresse7"
-		city="Paris" state="Paris" zip="75007" phone="0606060612" />
-	<customer customer_id="8" tax_id="9" name="name8" adresse="adresse8"
-		city="Paris" state="Paris" zip="75008" phone="0606060613" />
-		
-		
-	<customer_order	order_id="1"	customer_id="1"	date_placed="2008-01-01"	date_promised="2008-02-02"	terms="terms"	status="done" />
-	<customer_order	order_id="2"	customer_id="2"	date_placed="2009-02-02"	date_promised="2009-04-20"	terms="terms"	status="done" />
-	<customer_order	order_id="3"	customer_id="2"	date_placed="2010-03-03"	date_promised="2010-05-24"	terms="terms"	status="done" />
-	<customer_order	order_id="4"	customer_id="3"	date_placed="2008-04-04"	date_promised="2008-07-05"	terms="terms"	status="done" />
-	<customer_order	order_id="5"	customer_id="4"	date_placed="2009-05-04"	date_promised="2009-08-26"	terms="terms"	status="done" />
-	<customer_order	order_id="6"	customer_id="5"	date_placed="2010-06-05"	date_promised="2010-09-28"	terms="terms"	status="done" />
-	<customer_order	order_id="7"	customer_id="6"	date_placed="2008-07-05"	date_promised="2008-09-08"	terms="terms"	status="done" />
-	<customer_order	order_id="8"	customer_id="6"	date_placed="2009-08-07"	date_promised="2009-12-09"	terms="terms"	status="done" />
-	<customer_order	order_id="9"	customer_id="6"	date_placed="2009-09-08"	date_promised="2009-10-08"	terms="terms"	status="done" />
-	<customer_order	order_id="10"	customer_id="7"	date_placed="2010-10-09"	date_promised="2010-12-10"	terms="terms"	status="progress" />
-	<customer_order	order_id="11"	customer_id="7"	date_placed="2010-10-10"	date_promised="2010-12-29"	terms="terms"	status="progress" />
-	
+
+	<customer_order order_id="1" customer_id="1"
+		date_placed="2008-01-01" date_promised="2008-02-02" terms="terms"
+		status="done" />
+	<customer_order order_id="2" customer_id="2"
+		date_placed="2009-02-02" date_promised="2009-04-20" terms="terms"
+		status="done" />
+	<customer_order order_id="3" customer_id="2"
+		date_placed="2010-03-03" date_promised="2010-05-24" terms="terms"
+		status="done" />
+	<customer_order order_id="4" customer_id="3"
+		date_placed="2008-04-04" date_promised="2008-07-05" terms="terms"
+		status="done" />
 </dataset>
