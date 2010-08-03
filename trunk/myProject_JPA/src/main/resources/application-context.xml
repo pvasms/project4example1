@@ -38,7 +38,7 @@
      class="org.apache.commons.dbcp.BasicDataSource"
      destroy-method="close">
         <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
-        <property name="url" value="jdbc:hsqldb:test/db/myDB" />
+        <property name="url" value="jdbc:hsqldb:mem:test" />
         <property name="username" value="sa" />
         <property name="password" value="" />
     </bean>
