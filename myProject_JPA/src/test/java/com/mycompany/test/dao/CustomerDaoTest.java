@@ -62,6 +62,4 @@ public class CustomerDaoTest extends TestCase {
 		IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 		return connection;
 	}
-	
-	
 }
