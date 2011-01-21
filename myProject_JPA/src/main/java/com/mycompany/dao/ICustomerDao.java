@@ -18,8 +18,8 @@ public interface ICustomerDao {
 
     public Customer getById(Long id);
 
-    public void save(Customer dossier);
+    public void save(Customer customer);
 
-    public void delete(Customer dossier);
+    public void delete(Customer customer);
 
 }
