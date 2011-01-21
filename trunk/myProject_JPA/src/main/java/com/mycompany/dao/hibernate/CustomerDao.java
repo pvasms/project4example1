@@ -24,11 +24,11 @@ public class CustomerDao extends HibernateDaoSupport implements ICustomerDao{
          return (Customer) getHibernateTemplate().load(Customer.class, id);
     }
 
-    public void save(Customer dossier) {
-        getHibernateTemplate().save(dossier);
+    public void save(Customer customer) {
+        getHibernateTemplate().save(customer);
     }
 
-    public void delete(Customer dossier) {
-        getHibernateTemplate().delete(Customer.class);
+    public void delete(Customer customer) {
+        getHibernateTemplate().delete(customer);
     }
 }
