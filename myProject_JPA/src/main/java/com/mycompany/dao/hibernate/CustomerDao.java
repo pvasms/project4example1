@@ -1,34 +1,51 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.mycompany.dao.hibernate;
+
+import java.util.Collection;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.dao.ICustomerDao;
 import com.mycompany.entity.Customer;
-import java.util.Collection;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
 
 /**
- *
  * @author abdelkafi_s
  */
-public class CustomerDao extends HibernateDaoSupport implements ICustomerDao{
+@Repository
+public class CustomerDao implements ICustomerDao{
+	
+	@PersistenceContext
+	private EntityManager em;
 
     public Collection<Customer> getAll() {
-        return getHibernateTemplate().loadAll(Customer.class);
+    	Query query = em.createQuery("from Customer");
+        return query.getResultList();
+    }
+    
+    public Collection<Customer> findByName(String name) {
+    	Query query = em.createQuery("from Customer as c where c.name like :name");
+    	query.setParameter("name", name);
+        return query.getResultList();
     }
 
     public Customer getById(Long id) {
-         return (Customer) getHibernateTemplate().load(Customer.class, id);
+        return em.find(Customer.class, id);
     }
 
+    @Transactional
     public void save(Customer customer) {
-        getHibernateTemplate().save(customer);
+        em.persist(customer);
     }
 
-    public void delete(Customer customer) {
-        getHibernateTemplate().delete(customer);
+    @Transactional
+    public void delete(Long id) {
+    	Customer customer = em.find(Customer.class, id);  
+    	em.remove(customer);
     }
+	   
 }

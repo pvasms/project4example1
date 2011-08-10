@@ -20,7 +20,15 @@
           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 ">
 
-    <bean id="entityManagerFactory"
+	<context:annotation-config/>
+	<context:component-scan base-package="com.mycompany"/>
+	
+	<import resource="classpath*:/application-context-cxf.xml"/>
+
+	
+
+
+     <bean id="entityManagerFactory"
      class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="persistenceXmlLocation" value="META-INF/persistence.xml"  />
@@ -43,42 +51,12 @@
         <property name="password" value="" />
     </bean>
 
+	<tx:annotation-driven />
     <bean id="transactionManager"
      class="org.springframework.orm.jpa.JpaTransactionManager" >
         <property name="entityManagerFactory" ref="entityManagerFactory"  />
     </bean>
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.c3p0.min_size">1</prop>
-                <prop key="hibernate.c3p0.max_size">20</prop>
-                <prop key="hibernate.c3p0.timeout">0</prop>
-                <prop key="hibernate.c3p0.max_statement">100</prop>
-                <prop key="hibernate.c3p0.idle_test_period">60</prop>
-                <prop key="hibernate.c3p0.acquire_increment">5</prop>
-                <prop key="hibernate.c3p0.autocommit">false</prop>
-                <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
-                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
-            </props>
-        </property>
-        <property name="dataSource" ref="dataSource" />
-        <property name="annotatedClasses">
-            <list>
-                <value>com.mycompany.entity.Customer</value>
-                <value>com.mycompany.entity.CustomerOrder</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="customerDao" class="com.mycompany.dao.hibernate.CustomerDao" >
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
+      
     
-    <bean id="customerOrderDao" class="com.mycompany.dao.hibernate.CustomerOrderDao" >
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
 
 </beans>

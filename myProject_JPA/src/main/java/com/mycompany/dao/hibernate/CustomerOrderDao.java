@@ -5,31 +5,46 @@
 
 package com.mycompany.dao.hibernate;
 
+import java.util.Collection;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mycompany.dao.ICustomerOrderDao;
 import com.mycompany.entity.CustomerOrder;
-import java.util.Collection;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
 
 /**
- *
  * @author abdelkafi_s
  */
-public class CustomerOrderDao  extends HibernateDaoSupport implements ICustomerOrderDao{
+@Repository
+public class CustomerOrderDao implements ICustomerOrderDao {
+	
+	@PersistenceContext
+	private EntityManager em;
 
-  public Collection<CustomerOrder> getAll() {
-        return getHibernateTemplate().loadAll(CustomerOrder.class);
+   public Collection<CustomerOrder> getAll() {
+	   Query query = em.createQuery("from CustomerOrder");
+       return query.getResultList();
     }
 
     public CustomerOrder getById(Long id) {
-         return (CustomerOrder) getHibernateTemplate().load(CustomerOrder.class, id);
+    	return em.find(CustomerOrder.class, id);
     }
 
+    @Transactional
     public void save(CustomerOrder customerOrder) {
-        getHibernateTemplate().save(customerOrder);
+    	em.persist(customerOrder);
     }
 
-    public void delete(CustomerOrder customerOrder) {
-        getHibernateTemplate().delete(customerOrder);
+    @Transactional
+    public void delete(Long id) {
+    	CustomerOrder customerOrder = em.find(CustomerOrder.class, id);  
+    	em.remove(customerOrder);
     }
 
 }
