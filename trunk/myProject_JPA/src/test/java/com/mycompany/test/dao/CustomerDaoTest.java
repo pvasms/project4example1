@@ -1,63 +1,78 @@
 package com.mycompany.test.dao;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.Collection;
+import java.util.List;
 
-import junit.framework.Assert;
-
+import org.apache.commons.dbcp.BasicDataSource;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
-import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mycompany.dao.ICustomerDao;
 import com.mycompany.entity.Customer;
 
-@ContextConfiguration(locations = { "/application-context.xml"})
+
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CustomerDaoTest {
+@ContextConfiguration(locations={"/application-context.xml"})
+public class CustomerDaoTest  {
 
 	private static final String FLAT_XML_DATASET = "FlatXmlDataSet.xml";
 	
 	@Autowired
-	@Qualifier("customerDao")
-	private ICustomerDao iCustomerDao;
+	BasicDataSource bds;
 	
 	@Autowired
-    @Qualifier("sessionFactory")
-	SessionFactory sessionFactory;
+	private ICustomerDao iCustomerDao;
 
 
 	@Before
 	public void setUp() throws Exception {
 		DatabaseOperation.CLEAN_INSERT.execute(getConnection(), getDataSet());
-
 	}
 
 	@Test
 	public void testGetAllCustomers() {
 		Collection<Customer> listCustomers = iCustomerDao.getAll();
-		Assert.assertFalse(listCustomers.isEmpty());
+		assertFalse(listCustomers.isEmpty());
 	}
 	
+	@Test
 	public void testSaveCustomer() {
-		Collection<Customer> listCustomers1 = iCustomerDao.getAll();
-		Customer customer = new Customer(1, "name","adresse", "city", "state", "123", "0606060606", null);
+		Customer customer = new Customer(25, "nameTest","adresse", "city", "state", "123", "0606060606", null);
 		iCustomerDao.save(customer);
-		Collection<Customer> listCustomers2 = iCustomerDao.getAll();
-		Assert.assertEquals(listCustomers2.size() - listCustomers1.size(), 1);
+		List<Customer> listCustomers =  (List<Customer>) iCustomerDao.findByName("nameTest"); 
+		assertFalse(listCustomers.isEmpty());
+		Customer customerRes = (Customer) listCustomers.get(0);
+		assertEquals(customerRes.getCustomerId(), customer.getCustomerId());		
 	}
+	
+	@Test
+	public void testdeleteCustomer() {
+		Customer customer = new Customer(25, "nameTest","adresse", "city", "state", "123", "0606060606", null);
+		iCustomerDao.save(customer);
+		List<Customer> listCustomers =  (List<Customer>) iCustomerDao.findByName("nameTest"); 
+		assertFalse(listCustomers.isEmpty());
+		
+		Customer customerRes = (Customer) listCustomers.get(0);
+		iCustomerDao.delete(customerRes.getCustomerId());
+		listCustomers =  (List<Customer>) iCustomerDao.findByName("nameTest"); 
+		assertTrue(listCustomers.isEmpty());
+	}
+	
 
 	@SuppressWarnings("deprecation")
 	private IDataSet getDataSet() throws Exception {
@@ -67,7 +82,7 @@ public class CustomerDaoTest {
 	}
 
 	private IDatabaseConnection getConnection() throws Exception {
-		Connection jdbcConnection = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
+		Connection jdbcConnection = bds.getConnection();
 		IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
 		return connection;
 	}

@@ -5,6 +5,9 @@
 	<artifactId>myProject_JPA</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>myProject</name>
+	<properties>
+		<org.springframework.bom.version>3.0.3.RELEASE</org.springframework.bom.version>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -29,8 +32,6 @@
 					<buildDirectory>target</buildDirectory>
 				</configuration>
 			</plugin>
-
-
 		</plugins>
 	</build>
 	<dependencies>
@@ -43,8 +44,21 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>3.0.3.RELEASE</version>
+			<version>${org.springframework.bom.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework.bom.version}</version>
+		</dependency>
+		
+	   <dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-test</artifactId>
+	        <version>${org.springframework.bom.version}</version>
+	        <scope>test</scope>
+       </dependency>
 
 		<dependency>
 			<groupId>hibernate</groupId>
@@ -71,27 +85,8 @@
 			<version>2.4.7</version>
 			<scope>test</scope>
 		</dependency>
-		
-	  
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-hibernate3</artifactId>
-			<version>2.0.8</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>3.0.3.RELEASE</version>
-		</dependency>
-		
-	   <dependency>
-	        <groupId>org.springframework</groupId>
-	        <artifactId>spring-test</artifactId>
-	        <version>3.0.5.RELEASE</version>
-	        <scope>test</scope>
-       </dependency>
+	
 
 		<dependency>
 			<groupId>hsqldb</groupId>
