@@ -9,7 +9,6 @@ import com.mycompany.entity.Customer;
 import java.util.Collection;
 
 /**
- *
  * @author abdelkafi_s
  */
 public interface ICustomerDao {
