@@ -1,0 +1,1 @@
+This project is an example to explain how to populate a database with DbUnit.
